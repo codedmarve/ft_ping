@@ -22,11 +22,11 @@ int main(int argc, char** argv)
 
 	status = getaddrinfo(argv[1], NULL, &hints, &result);
 	if (status != 0) {
-		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
+		fprintf(stderr, "ping: %s: %s\n", argv[1], gai_strerror(status));
 		exit(EXIT_FAILURE);
 	}
 
-	// 
+
 	dest = (struct sockaddr_in *)result->ai_addr;
 	inet_ntop(AF_INET, &(dest->sin_addr), ipstr, sizeof(ipstr));
 
@@ -35,11 +35,15 @@ int main(int argc, char** argv)
 	int socketfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 	if (socketfd == -1) {
 		perror("socket");
+		freeaddrinfo(result);
 		return 1;
 	}
 
-	// sendto(socketfd, &pkt, sizeof(pkt), 0);
+	// sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)dest, sizeof(*dest));
 		
-	printf("PING google.com (%s): 56 data bytes\n", ipstr);
+	printf("PING %s (%s): 56 data bytes\n", argv[1], ipstr);
+
+	freeaddrinfo(result);
+	close(socketfd);
 	return (0);
 }

@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#define BUF_SIZE 500
+#define BUF_SIZE 1024
 
 struct icmp_packet {
     struct icmphdr hdr;

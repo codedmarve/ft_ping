@@ -14,8 +14,8 @@ void	build_icmp_echo(struct icmp_packet *pkt, int seq)
 	memset(pkt, 0, sizeof(*pkt));
 	pkt->hdr.type = ICMP_ECHO;
 	pkt->hdr.code = 0;
-	pkt->hdr.un.echo.id = getpid() & 0XFFFF;
-	pkt->hdr.un.echo.sequence = seq;
+	pkt->hdr.un.echo.id = htons(getpid() & 0XFFFF);
+	pkt->hdr.un.echo.sequence = htons(seq);
 
 	memset(pkt->msg, 0xA5, sizeof(pkt->msg));
 
